@@ -1,3 +1,26 @@
+#[derive(Debug)]
+struct Instruction {
+    opcode: OpCode,
+    op0: u8,
+    op1: u8,
+}
+
+impl Instruction {
+    // Instruction constructor, a.k.a. disassembler.
+    fn disassemble(insn: u32) -> Instruction {
+        // Keep the first 6 bits only
+        let opcode = OpCode::from_u8((insn & 0x3f) as u8);
+
+        // Shift right by 6, keep only the first 5 bits.
+        let op0 = ((insn >> 6) & 0x1f) as u8;
+
+        // Shift right by 11, keep only the first 5 bits.
+        let op1: u8 = ((insn >> 11) & 0x1f) as u8;
+
+        Instruction { opcode, op0, op1 }
+    }
+}
+
 #[allow(dead_code)]
 #[derive(Debug)]
 enum OpCode {
@@ -46,24 +69,16 @@ fn main() {
         insn, r1, r3
     );
 
-    // Keep the first 6 bits only
-    let opcode = (insn & 0x3f) as u8;
-
-    // Shift right by 6, keep only the first 5 bits.
-    let op0 = ((insn >> 6) & 0x1f) as u8;
-
-    // Shift right by 11, keep only the first 5 bits.
-    let op1 = ((insn >> 11) & 0x1f) as u8;
-
+    let decoded_instruction = Instruction::disassemble(insn);
     println!(
-        "do-core-1: instruction decoded into [opcode:{:?} op0:{} op1:{}]",
-        opcode, op0, op1
+        "do-core-1: instruction decoded into {:?}",
+        decoded_instruction
     );
 
-    match OpCode::from_u8(opcode) {
+    match decoded_instruction.opcode {
         OpCode::ADD => r1 = add(r1, r3),
         OpCode::XOR => r1 = xor(r1, r3),
-        _ => panic!("Unknown opcode {:?}", opcode),
+        _ => panic!("Unknown opcode {:?}", decoded_instruction.opcode),
     }
 
     println!(
