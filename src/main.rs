@@ -65,7 +65,7 @@ fn xor(op0: u16, op1: u16) -> u16 {
     op0 ^ op1
 }
 
-fn main() {
+fn main() -> Result<(), Error> {
     let arguments = App::new("do-core1")
         .about("do-core1 emulator")
         .arg(
@@ -91,11 +91,10 @@ fn main() {
         insn, r0, r1
     );
 
-    if Instruction::disassemble(insn).is_err() {
-        panic!("Invalid instruction");
-    }
-
-    let decoded_instruction = Instruction::disassemble(insn).unwrap();
+    let decoded_instruction = match Instruction::disassemble(insn) {
+        Ok(insn) => insn,
+        Err(e) => return Err(e),
+    };
     println!(
         "do-core-1: instruction decoded into {:?}",
         decoded_instruction
@@ -111,6 +110,8 @@ fn main() {
         "do-core-1: instruction {:#x?} Final CPU state [R0:{:#x?} R1:{:#x?}]",
         insn, r0, r1
     );
+
+    Ok(())
 }
 
 #[cfg(test)]
