@@ -80,15 +80,19 @@ fn xor(op0: u32, op1: u32) -> u32 {
     op0 ^ op1
 }
 
+fn dump_cpu_state(preamble: &str, registers: &[u32; MAX_REGISTER_INDEX as usize + 1]) {
+    println!("do-core1: {}:", preamble);
+    for (index, register) in registers.iter().enumerate() {
+        println!("\tR{}: {:#x?}", index, *register);
+    }
+}
+
 fn main() -> Result<(), Error> {
     let opts: DoCoreOpts = DoCoreOpts::parse();
     let insn = u32::from_str_radix(opts.insn.trim_start_matches("0x"), 16).unwrap();
-    let mut registers = [0; MAX_REGISTER_INDEX as usize + 1];
+    let mut registers = [0u32; MAX_REGISTER_INDEX as usize + 1];
 
-    println!(
-        "do-core-1: instruction {:#x?} Initial CPU state {:#x?}",
-        insn, registers
-    );
+    dump_cpu_state("Initial CPU state", &registers);
 
     let decoded_instruction = Instruction::disassemble(insn)?;
     println!(
@@ -105,10 +109,7 @@ fn main() -> Result<(), Error> {
         _ => panic!("Unknown opcode {:?}", decoded_instruction.opcode),
     }
 
-    println!(
-        "do-core-1: instruction {:#x?} Final CPU state {:#x?}",
-        insn, registers
-    );
+    dump_cpu_state("Final CPU state", &registers);
 
     Ok(())
 }
