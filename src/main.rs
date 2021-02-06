@@ -91,6 +91,11 @@ fn main() -> Result<(), Error> {
     let opts: DoCoreOpts = DoCoreOpts::parse();
     let insn = u32::from_str_radix(opts.insn.trim_start_matches("0x"), 16).unwrap();
     let mut registers = [0u32; MAX_REGISTER_INDEX as usize + 1];
+    // Arbitrary initial registers value.
+    // Registers will eventually be initialized through memory loads.
+    for (index, register) in registers.iter_mut().enumerate() {
+        *register = index as u32 * 0x10;
+    }
 
     dump_cpu_state("Initial CPU state", &registers);
 
