@@ -10,6 +10,7 @@ struct Instruction {
 
 #[derive(Debug)]
 enum Error {
+    InvalidOpCode(u8),
     Op0OutOfRange,
     Op1OutOfRange,
 }
@@ -20,7 +21,10 @@ const MAX_REGISTER_INDEX: u8 = 7;
 impl Instruction {
     // Instruction constructor, a.k.a. disassembler.
     fn disassemble(insn: u16) -> Result<Instruction, Error> {
-        let opcode = OpCode::from_u8((insn >> 8) as u8);
+        let opcode = match OpCode::from_u8((insn >> 8) as u8) {
+            Ok(opcode) => opcode,
+            Err(e) => return Err(e),
+        };
         let op0 = ((insn & 0xf0) >> 4) as u8;
         let op1: u8 = (insn & 0xf) as u8;
 
@@ -46,13 +50,13 @@ enum OpCode {
 }
 
 impl OpCode {
-    fn from_u8(opcode: u8) -> OpCode {
+    fn from_u8(opcode: u8) -> Result<OpCode, Error> {
         match opcode {
-            0x00 => OpCode::LD,
-            0x01 => OpCode::ST,
-            0x02 => OpCode::ADD,
-            0x03 => OpCode::XOR,
-            _ => panic!("Unknown opcode {:?}", opcode),
+            0x00 => Ok(OpCode::LD),
+            0x01 => Ok(OpCode::ST),
+            0x02 => Ok(OpCode::ADD),
+            0x03 => Ok(OpCode::XOR),
+            _ => Err(Error::InvalidOpCode(opcode)),
         }
     }
 }
