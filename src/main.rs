@@ -1,3 +1,6 @@
+extern crate clap;
+use clap::{App, Arg};
+
 #[derive(Debug)]
 struct Instruction {
     opcode: OpCode,
@@ -46,12 +49,23 @@ fn xor(op0: u16, op1: u16) -> u16 {
 }
 
 fn main() {
-    // ADD R0, R1
-    // instruction 0x201 decodes into:
-    //   opcode: 0x2 (ADD)
-    //   op0: 0 (Index 0 into the registers table, i.e. R0)
-    //   op0: 1 (Index 1 into the registers table, i.e. R1)
-    let insn: u16 = 0x201;
+    let arguments = App::new("do-core1")
+        .about("do-core1 emulator")
+        .arg(
+            Arg::with_name("instruction")
+                .long("instruction")
+                .help("do-core1 instruction to execute")
+                .takes_value(true),
+        )
+        .get_matches();
+
+    let insn_string = arguments
+        .value_of("instruction")
+        .expect("Missing --instruction argument")
+        .trim_start_matches("0x");
+
+    // Convert an hexadecimal formatted string into a u16
+    let insn = u16::from_str_radix(insn_string, 16).unwrap();
     let mut r0: u16 = 10;
     let r1: u16 = 20;
 
