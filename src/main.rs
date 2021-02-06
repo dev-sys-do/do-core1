@@ -76,7 +76,7 @@ fn xor(op0: u32, op1: u32) -> u32 {
     op0 ^ op1
 }
 
-fn main() {
+fn main() -> Result<(), Error> {
     let opts: DoCoreOpts = DoCoreOpts::parse();
     let insn = u32::from_str_radix(opts.insn.trim_start_matches("0x"), 16).unwrap();
     let mut r1: u32 = 20;
@@ -87,11 +87,10 @@ fn main() {
         insn, r1, r3
     );
 
-    if Instruction::disassemble(insn).is_err() {
-        panic!("Invalid instruction");
-    }
-
-    let decoded_instruction = Instruction::disassemble(insn).unwrap();
+    let decoded_instruction = match Instruction::disassemble(insn) {
+        Ok(insn) => insn,
+        Err(e) => return Err(e),
+    };
     println!(
         "do-core-1: instruction decoded into {:?}",
         decoded_instruction
@@ -107,6 +106,8 @@ fn main() {
         "do-core-1: instruction {:#x?} Final CPU state [R1:{:#x?} R3:{:#x?}]",
         insn, r1, r3
     );
+
+    Ok(())
 }
 
 #[cfg(test)]
