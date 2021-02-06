@@ -86,12 +86,11 @@ fn main() -> Result<(), Error> {
 
     // Convert an hexadecimal formatted string into a u16
     let insn = u16::from_str_radix(insn_string, 16).unwrap();
-    let mut r0: u16 = 10;
-    let r1: u16 = 20;
+    let mut registers = [0; MAX_REGISTER_INDEX as usize + 1];
 
     println!(
-        "do-core-1: instruction {:#x?} Initial CPU state [R0:{:#x?} R1:{:#x?}]",
-        insn, r0, r1
+        "do-core-1: instruction {:#x?} Initial CPU state {:#x?}",
+        insn, registers
     );
 
     let decoded_instruction = Instruction::disassemble(insn)?;
@@ -99,16 +98,18 @@ fn main() -> Result<(), Error> {
         "do-core-1: instruction decoded into {:?}",
         decoded_instruction
     );
+    let op0 = decoded_instruction.op0 as usize;
+    let op1 = decoded_instruction.op1 as usize;
 
     match decoded_instruction.opcode {
-        OpCode::ADD => r0 = add(r0, r1)?,
-        OpCode::XOR => r0 = xor(r0, r1),
+        OpCode::ADD => registers[op0] = add(registers[op0], registers[op1])?,
+        OpCode::XOR => registers[op0] = xor(registers[op0], registers[op1]),
         _ => panic!("Unknown opcode {:?}", decoded_instruction.opcode),
     }
 
     println!(
-        "do-core-1: instruction {:#x?} Final CPU state [R0:{:#x?} R1:{:#x?}]",
-        insn, r0, r1
+        "do-core-1: instruction {:#x?} Initial CPU state {:#x?}",
+        insn, registers
     );
 
     Ok(())
