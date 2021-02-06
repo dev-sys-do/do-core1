@@ -128,6 +128,24 @@ mod tests {
     }
 
     #[test]
+    fn test_instruction_disassemble_badop_r9_r1() -> Result<(), Error> {
+        // Use all 6 bytes for the opcode.
+        // It should be invalid for a while...
+        let insn_bytes: u32 = 0x067f;
+        assert!(Instruction::disassemble(insn_bytes).is_err());
+
+        Ok(())
+    }
+
+    #[test]
+    fn test_instruction_disassemble_add_r0_r10() -> Result<(), Error> {
+        let insn_bytes: u32 = 0x20a;
+        assert!(Instruction::disassemble(insn_bytes).is_err());
+
+        Ok(())
+    }
+
+    #[test]
     fn test_instruction_disassemble_add_r7_r2() -> Result<(), Error> {
         let insn_bytes: u32 = 0x11c2;
         let insn = Instruction::disassemble(insn_bytes)?;
