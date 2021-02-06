@@ -16,13 +16,27 @@ fn xor(op0: u16, op1: u16) -> u16 {
 }
 
 fn main() {
-    let opcode: OpCode = OpCode::ADD;
+    // ADD R0, R1
+    // instruction 0x201 decodes into:
+    //   opcode: 0x2 (ADD)
+    //   op0: 0 (Index 0 into the registers table, i.e. R0)
+    //   op0: 1 (Index 1 into the registers table, i.e. R1)
+    let insn: u16 = 0x201;
     let mut r0: u16 = 10;
     let r1: u16 = 20;
 
     println!(
-        "do-core-1: opcode {:?} Initial CPU state [R0:{:#x?} R1:{:#x?}]",
-        opcode, r0, r1
+        "do-core-1: instruction {:#x?} Initial CPU state [R0:{:#x?} R1:{:#x?}]",
+        insn, r0, r1
+    );
+
+    let opcode = (insn >> 8) as u8;
+    let op0 = ((insn & 0xf0) >> 4) as u8;
+    let op1: u8 = (insn & 0xf) as u8;
+
+    println!(
+        "do-core-1: instruction decoded into [opcode:{:?} op0:{} op1:{}]",
+        opcode, op0, op1
     );
 
     match opcode {
@@ -32,7 +46,7 @@ fn main() {
     }
 
     println!(
-        "do-core-1: opcode {:?} Final CPU state [R0:{:#x?} R1:{:#x?}]",
-        opcode, r0, r1
+        "do-core-1: instruction {:#x?} Final CPU state [R0:{:#x?} R1:{:#x?}]",
+        insn, r0, r1
     );
 }
