@@ -21,7 +21,7 @@ fn main() {
     let r1: u32 = 20;
 
     println!(
-        "do-core-1: opcode {:?} Initial CPU state [R0:{} R1:{}]",
+        "do-core-1: opcode {:?} Initial CPU state [R0:{:#x?} R1:{:#x?}]",
         opcode, r0, r1
     );
 
@@ -32,7 +32,7 @@ fn main() {
     }
 
     println!(
-        "do-core-1: opcode {:?} Final CPU state [R0:{} R1:{}]",
+        "do-core-1: opcode {:?} Final CPU state [R0:{:#x?} R1:{:#x?}]",
         opcode, r0, r1
     );
 }
