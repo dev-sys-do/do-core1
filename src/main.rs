@@ -91,11 +91,10 @@ fn main() {
         insn, r0, r1
     );
 
-    if Instruction::disassemble(insn).is_err() {
-        panic!("Invalid instruction");
-    }
-
-    let decoded_instruction = Instruction::disassemble(insn).unwrap();
+    let decoded_instruction = match Instruction::disassemble(insn) {
+        Ok(insn) => insn,
+        Err(e) => panic!("Invalid instruction {:?}", e),
+    };
     println!(
         "do-core-1: instruction decoded into {:?}",
         decoded_instruction
