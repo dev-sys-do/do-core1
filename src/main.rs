@@ -93,7 +93,12 @@ fn main() -> Result<(), Error> {
 
     // Convert an hexadecimal formatted string into a u16
     let insn = u16::from_str_radix(insn_string, 16).unwrap();
-    let mut registers = [0; MAX_REGISTER_INDEX as usize + 1];
+    let mut registers = [0u16; MAX_REGISTER_INDEX as usize + 1];
+    // Arbitrary initial registers value.
+    // Registers will eventually be initialized through memory loads.
+    for (index, register) in registers.iter_mut().enumerate() {
+        *register = index as u16 * 0x10;
+    }
 
     dump_cpu_state("Initial CPU state", &registers);
 
