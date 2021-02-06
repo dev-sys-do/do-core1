@@ -91,4 +91,44 @@ mod tests {
         assert_eq!(insn.op0, 0);
         assert_eq!(insn.op1, 1);
     }
+
+    #[test]
+    fn test_instruction_disassemble_add_r7_r2() {
+        let insn_bytes: u16 = 0x272;
+        let insn = Instruction::disassemble(insn_bytes);
+
+        assert_eq!(insn.opcode, OpCode::ADD);
+        assert_eq!(insn.op0, 7);
+        assert_eq!(insn.op1, 2);
+    }
+
+    #[test]
+    fn test_instruction_disassemble_ld_r0_r1() {
+        let insn_bytes: u16 = 0x01;
+        let insn = Instruction::disassemble(insn_bytes);
+
+        assert_eq!(insn.opcode, OpCode::LD);
+        assert_eq!(insn.op0, 0);
+        assert_eq!(insn.op1, 1);
+    }
+
+    #[test]
+    fn test_instruction_disassemble_xor_r2_r3() {
+        let insn_bytes: u16 = 0x323;
+        let insn = Instruction::disassemble(insn_bytes);
+
+        assert_eq!(insn.opcode, OpCode::XOR);
+        assert_eq!(insn.op0, 2);
+        assert_eq!(insn.op1, 3);
+    }
+
+    #[test]
+    fn test_instruction_disassemble_st_r5_r0() {
+        let insn_bytes: u16 = 0x150;
+        let insn = Instruction::disassemble(insn_bytes);
+
+        assert_eq!(insn.opcode, OpCode::ST);
+        assert_eq!(insn.op0, 5);
+        assert_eq!(insn.op1, 0);
+    }
 }
