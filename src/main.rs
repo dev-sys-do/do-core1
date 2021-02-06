@@ -17,7 +17,7 @@ impl Instruction {
 }
 
 #[allow(dead_code)]
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 enum OpCode {
     LD = 0x00,
     ST = 0x01,
@@ -76,4 +76,19 @@ fn main() {
         "do-core-1: instruction {:#x?} Final CPU state [R0:{:#x?} R1:{:#x?}]",
         insn, r0, r1
     );
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::{Instruction, OpCode};
+
+    #[test]
+    fn test_instruction_disassemble_add_r0_r1() {
+        let insn_bytes: u16 = 0x201;
+        let insn = Instruction::disassemble(insn_bytes);
+
+        assert_eq!(insn.opcode, OpCode::ADD);
+        assert_eq!(insn.op0, 0);
+        assert_eq!(insn.op1, 1);
+    }
 }
