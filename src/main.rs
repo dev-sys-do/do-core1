@@ -1,3 +1,4 @@
+#[allow(dead_code)]
 #[derive(Debug)]
 enum OpCode {
     LDW = 0x00,
