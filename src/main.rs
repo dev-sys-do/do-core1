@@ -20,6 +20,7 @@ enum Error {
     InvalidOpCode(u8),
     Op0OutOfRange,
     Op1OutOfRange,
+    AdditionOverflow(u32, u32),
 }
 
 // do-core1 register indexes range from 0 to 7.
@@ -69,8 +70,10 @@ impl OpCode {
         }
     }
 }
-fn add(op0: u32, op1: u32) -> u32 {
-    op0 + op1
+
+fn add(op0: u32, op1: u32) -> Result<u32, Error> {
+    op0.checked_add(op1)
+        .ok_or(Error::AdditionOverflow(op0, op1))
 }
 
 fn xor(op0: u32, op1: u32) -> u32 {
@@ -95,7 +98,7 @@ fn main() -> Result<(), Error> {
     );
 
     match decoded_instruction.opcode {
-        OpCode::ADD => r1 = add(r1, r3),
+        OpCode::ADD => r1 = add(r1, r3)?,
         OpCode::XOR => r1 = xor(r1, r3),
         _ => panic!("Unknown opcode {:?}", decoded_instruction.opcode),
     }
