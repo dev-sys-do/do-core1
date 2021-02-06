@@ -1,3 +1,21 @@
+#[derive(Debug)]
+struct Instruction {
+    opcode: OpCode,
+    op0: u8,
+    op1: u8,
+}
+
+impl Instruction {
+    // Instruction constructor, a.k.a. disassembler.
+    fn disassemble(insn: u16) -> Instruction {
+        let opcode = OpCode::from_u8((insn >> 8) as u8);
+        let op0 = ((insn & 0xf0) >> 4) as u8;
+        let op1: u8 = (insn & 0xf) as u8;
+
+        Instruction { opcode, op0, op1 }
+    }
+}
+
 #[allow(dead_code)]
 #[derive(Debug)]
 enum OpCode {
@@ -42,19 +60,16 @@ fn main() {
         insn, r0, r1
     );
 
-    let opcode = (insn >> 8) as u8;
-    let op0 = ((insn & 0xf0) >> 4) as u8;
-    let op1: u8 = (insn & 0xf) as u8;
-
+    let decoded_instruction = Instruction::disassemble(insn);
     println!(
-        "do-core-1: instruction decoded into [opcode:{:?} op0:{} op1:{}]",
-        opcode, op0, op1
+        "do-core-1: instruction decoded into {:?}",
+        decoded_instruction
     );
 
-    match OpCode::from_u8(opcode) {
+    match decoded_instruction.opcode {
         OpCode::ADD => r0 = add(r0, r1),
         OpCode::XOR => r0 = xor(r0, r1),
-        _ => panic!("Unknown opcode {:?}", opcode),
+        _ => panic!("Unknown opcode {:?}", decoded_instruction.opcode),
     }
 
     println!(
