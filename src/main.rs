@@ -17,6 +17,7 @@ struct Instruction {
 
 #[derive(Debug)]
 enum Error {
+    InvalidOpCode(u8),
     Op0OutOfRange,
     Op1OutOfRange,
 }
@@ -28,7 +29,10 @@ impl Instruction {
     // Instruction constructor, a.k.a. disassembler.
     fn disassemble(insn: u32) -> Result<Instruction, Error> {
         // Keep the first 6 bits only
-        let opcode = OpCode::from_u8((insn & 0x3f) as u8);
+        let opcode = match OpCode::from_u8((insn & 0x3f) as u8) {
+            Ok(opcode) => opcode,
+            Err(e) => return Err(e),
+        };
 
         // Shift right by 6, keep only the first 5 bits.
         let op0 = ((insn >> 6) & 0x1f) as u8;
@@ -58,13 +62,13 @@ enum OpCode {
 }
 
 impl OpCode {
-    fn from_u8(opcode: u8) -> OpCode {
+    fn from_u8(opcode: u8) -> Result<OpCode, Error> {
         match opcode {
-            0x00 => OpCode::LDW,
-            0x01 => OpCode::STW,
-            0x02 => OpCode::ADD,
-            0x03 => OpCode::XOR,
-            _ => panic!("Unknown opcode {:?}", opcode),
+            0x00 => Ok(OpCode::LDW),
+            0x01 => Ok(OpCode::STW),
+            0x02 => Ok(OpCode::ADD),
+            0x03 => Ok(OpCode::XOR),
+            _ => Err(Error::InvalidOpCode(opcode)),
         }
     }
 }
