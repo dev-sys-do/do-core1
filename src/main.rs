@@ -116,55 +116,65 @@ fn main() -> Result<(), Error> {
 
 #[cfg(test)]
 mod tests {
-    use crate::{Instruction, OpCode};
+    use crate::{Error, Instruction, OpCode};
 
     #[test]
-    fn test_instruction_disassemble_add_r0_r1() {
+    fn test_instruction_disassemble_add_r0_r1() -> Result<(), Error> {
         let insn_bytes: u16 = 0x201;
-        let insn = Instruction::disassemble(insn_bytes);
+        let insn = Instruction::disassemble(insn_bytes)?;
 
         assert_eq!(insn.opcode, OpCode::ADD);
         assert_eq!(insn.op0, 0);
         assert_eq!(insn.op1, 1);
+
+        Ok(())
     }
 
     #[test]
-    fn test_instruction_disassemble_add_r7_r2() {
+    fn test_instruction_disassemble_add_r7_r2() -> Result<(), Error> {
         let insn_bytes: u16 = 0x272;
-        let insn = Instruction::disassemble(insn_bytes);
+        let insn = Instruction::disassemble(insn_bytes)?;
 
         assert_eq!(insn.opcode, OpCode::ADD);
         assert_eq!(insn.op0, 7);
         assert_eq!(insn.op1, 2);
+
+        Ok(())
     }
 
     #[test]
-    fn test_instruction_disassemble_ld_r0_r1() {
+    fn test_instruction_disassemble_ld_r0_r1() -> Result<(), Error> {
         let insn_bytes: u16 = 0x01;
-        let insn = Instruction::disassemble(insn_bytes);
+        let insn = Instruction::disassemble(insn_bytes)?;
 
         assert_eq!(insn.opcode, OpCode::LD);
         assert_eq!(insn.op0, 0);
         assert_eq!(insn.op1, 1);
+
+        Ok(())
     }
 
     #[test]
-    fn test_instruction_disassemble_xor_r2_r3() {
+    fn test_instruction_disassemble_xor_r2_r3() -> Result<(), Error> {
         let insn_bytes: u16 = 0x323;
-        let insn = Instruction::disassemble(insn_bytes);
+        let insn = Instruction::disassemble(insn_bytes)?;
 
         assert_eq!(insn.opcode, OpCode::XOR);
         assert_eq!(insn.op0, 2);
         assert_eq!(insn.op1, 3);
+
+        Ok(())
     }
 
     #[test]
-    fn test_instruction_disassemble_st_r5_r0() {
+    fn test_instruction_disassemble_st_r5_r0() -> Result<(), Error> {
         let insn_bytes: u16 = 0x150;
-        let insn = Instruction::disassemble(insn_bytes);
+        let insn = Instruction::disassemble(insn_bytes)?;
 
         assert_eq!(insn.opcode, OpCode::ST);
         assert_eq!(insn.op0, 5);
         assert_eq!(insn.op1, 0);
+
+        Ok(())
     }
 }
