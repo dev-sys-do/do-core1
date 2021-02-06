@@ -8,14 +8,31 @@ struct Instruction {
     op1: u8,
 }
 
+#[derive(Debug)]
+enum Error {
+    Op0OutOfRange,
+    Op1OutOfRange,
+}
+
+// do-core1 register indexes range from 0 to 7.
+const MAX_REGISTER_INDEX: u8 = 7;
+
 impl Instruction {
     // Instruction constructor, a.k.a. disassembler.
-    fn disassemble(insn: u16) -> Instruction {
+    fn disassemble(insn: u16) -> Result<Instruction, Error> {
         let opcode = OpCode::from_u8((insn >> 8) as u8);
         let op0 = ((insn & 0xf0) >> 4) as u8;
         let op1: u8 = (insn & 0xf) as u8;
 
-        Instruction { opcode, op0, op1 }
+        if op0 > MAX_REGISTER_INDEX {
+            return Err(Error::Op0OutOfRange);
+        }
+
+        if op1 > MAX_REGISTER_INDEX {
+            return Err(Error::Op1OutOfRange);
+        }
+
+        Ok(Instruction { opcode, op0, op1 })
     }
 }
 
@@ -74,7 +91,11 @@ fn main() {
         insn, r0, r1
     );
 
-    let decoded_instruction = Instruction::disassemble(insn);
+    if Instruction::disassemble(insn).is_err() {
+        panic!("Invalid instruction");
+    }
+
+    let decoded_instruction = Instruction::disassemble(insn).unwrap();
     println!(
         "do-core-1: instruction decoded into {:?}",
         decoded_instruction
