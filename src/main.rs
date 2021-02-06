@@ -7,6 +7,17 @@ enum OpCode {
     XOR = 0x03,
 }
 
+impl OpCode {
+    fn from_u8(opcode: u8) -> OpCode {
+        match opcode {
+            0x00 => OpCode::LDW,
+            0x01 => OpCode::STW,
+            0x02 => OpCode::ADD,
+            0x03 => OpCode::XOR,
+            _ => panic!("Unknown opcode {:?}", opcode),
+        }
+    }
+}
 fn add(op0: u32, op1: u32) -> u32 {
     op0 + op1
 }
@@ -49,7 +60,7 @@ fn main() {
         opcode, op0, op1
     );
 
-    match opcode {
+    match OpCode::from_u8(opcode) {
         OpCode::ADD => r1 = add(r1, r3),
         OpCode::XOR => r1 = xor(r1, r3),
         _ => panic!("Unknown opcode {:?}", opcode),
