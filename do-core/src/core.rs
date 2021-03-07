@@ -20,6 +20,14 @@ impl Core {
         core
     }
 
+    pub fn register(&self, index: u8) -> Result<u16, Error> {
+        if index > MAX_REGISTER_INDEX {
+            return Err(Error::Op0OutOfRange);
+        }
+
+        Ok(self.registers[index as usize])
+    }
+
     pub fn dump(&self, preamble: &str) {
         println!("do-core1: {}:", preamble);
         for (index, register) in self.registers.iter().enumerate() {
@@ -63,6 +71,48 @@ impl Core {
         let op1 = insn.op1() as usize;
 
         self.registers[op0] = self.registers[op0] ^ self.registers[op1];
+
+        Ok(())
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::core::Core;
+    use crate::Error;
+
+    #[test]
+    fn test_core_add_r4_r5() -> Result<(), Error> {
+        let insn = 0x245;
+        let mut cpu = Core::new();
+
+        let r4 = cpu.register(4)?;
+        let r5 = cpu.register(5)?;
+
+        let decoded_insn = cpu.decode(insn)?;
+        cpu.execute(decoded_insn)?;
+
+        let new_r4 = cpu.register(4)?;
+
+        assert_eq!(new_r4, r4 + r5);
+
+        Ok(())
+    }
+
+    #[test]
+    fn test_core_xor_r1_r7() -> Result<(), Error> {
+        let insn = 0x317;
+        let mut cpu = Core::new();
+
+        let r1 = cpu.register(1)?;
+        let r7 = cpu.register(7)?;
+
+        let decoded_insn = cpu.decode(insn)?;
+        cpu.execute(decoded_insn)?;
+
+        let new_r1 = cpu.register(1)?;
+
+        assert_eq!(new_r1, r1 ^ r7);
 
         Ok(())
     }
