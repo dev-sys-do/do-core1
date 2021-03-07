@@ -1,37 +1,8 @@
 extern crate clap;
 
 use clap::{App, Arg};
-use do_core::instruction::OpCode;
-use do_core::Error;
-
-#[derive(Debug)]
-struct Instruction {
-    opcode: OpCode,
-    op0: u8,
-    op1: u8,
-}
-
-// do-core1 register indexes range from 0 to 7.
-const MAX_REGISTER_INDEX: u8 = 7;
-
-impl Instruction {
-    // Instruction constructor, a.k.a. disassembler.
-    fn disassemble(insn: u16) -> Result<Instruction, Error> {
-        let opcode = OpCode::from_u8((insn >> 8) as u8)?;
-        let op0 = ((insn & 0xf0) >> 4) as u8;
-        let op1: u8 = (insn & 0xf) as u8;
-
-        if op0 > MAX_REGISTER_INDEX {
-            return Err(Error::Op0OutOfRange);
-        }
-
-        if op1 > MAX_REGISTER_INDEX {
-            return Err(Error::Op1OutOfRange);
-        }
-
-        Ok(Instruction { opcode, op0, op1 })
-    }
-}
+use do_core::instruction::{Instruction, OpCode};
+use do_core::{Error, MAX_REGISTER_INDEX};
 
 fn add(op0: u16, op1: u16) -> Result<u16, Error> {
     op0.checked_add(op1)
