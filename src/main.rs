@@ -1,6 +1,6 @@
 use clap::Parser;
-use do_core::instruction::OpCode;
-use do_core::Error;
+use do_core::instruction::{Instruction, OpCode};
+use do_core::{Error, MAX_REGISTER_INDEX};
 
 #[derive(Parser)]
 #[clap(version, author)]
@@ -8,40 +8,6 @@ struct DoCoreOpts {
     /// DO Core instruction
     #[clap(short, long)]
     insn: String,
-}
-
-#[derive(Debug)]
-struct Instruction {
-    opcode: OpCode,
-    op0: u8,
-    op1: u8,
-}
-
-// do-core1 register indexes range from 0 to 31.
-const MAX_REGISTER_INDEX: u8 = 31;
-
-impl Instruction {
-    // Instruction constructor, a.k.a. disassembler.
-    fn disassemble(insn: u32) -> Result<Instruction, Error> {
-        // Keep the first 6 bits only
-        let opcode = OpCode::from_u8((insn & 0x3f) as u8)?;
-
-        // Shift right by 6, keep only the first 5 bits.
-        let op0 = ((insn >> 6) & 0x1f) as u8;
-
-        // Shift right by 11, keep only the first 5 bits.
-        let op1: u8 = ((insn >> 11) & 0x1f) as u8;
-
-        if op0 > MAX_REGISTER_INDEX {
-            return Err(Error::Op0OutOfRange);
-        }
-
-        if op1 > MAX_REGISTER_INDEX {
-            return Err(Error::Op1OutOfRange);
-        }
-
-        Ok(Instruction { opcode, op0, op1 })
-    }
 }
 
 fn add(op0: u32, op1: u32) -> Result<u32, Error> {
