@@ -8,3 +8,4 @@ edition = "2018"
 
 [dependencies]
 clap = { version = "3.0.5", features = ["derive"] }
+do-core = { path = "do-core" }
