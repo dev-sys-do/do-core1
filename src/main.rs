@@ -1,19 +1,14 @@
 extern crate clap;
+
 use clap::{App, Arg};
+use do_core::instruction::OpCode;
+use do_core::Error;
 
 #[derive(Debug)]
 struct Instruction {
     opcode: OpCode,
     op0: u8,
     op1: u8,
-}
-
-#[derive(Debug)]
-enum Error {
-    InvalidOpCode(u8),
-    Op0OutOfRange,
-    Op1OutOfRange,
-    AdditionOverflow(u16, u16),
 }
 
 // do-core1 register indexes range from 0 to 7.
@@ -35,27 +30,6 @@ impl Instruction {
         }
 
         Ok(Instruction { opcode, op0, op1 })
-    }
-}
-
-#[allow(dead_code)]
-#[derive(Debug, PartialEq)]
-enum OpCode {
-    LD = 0x00,
-    ST = 0x01,
-    ADD = 0x02,
-    XOR = 0x03,
-}
-
-impl OpCode {
-    fn from_u8(opcode: u8) -> Result<OpCode, Error> {
-        match opcode {
-            0x00 => Ok(OpCode::LD),
-            0x01 => Ok(OpCode::ST),
-            0x02 => Ok(OpCode::ADD),
-            0x03 => Ok(OpCode::XOR),
-            _ => Err(Error::InvalidOpCode(opcode)),
-        }
     }
 }
 
