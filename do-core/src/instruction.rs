@@ -50,4 +50,16 @@ impl Instruction {
 
         Ok(Instruction { opcode, op0, op1 })
     }
+
+    pub fn opcode(&self) -> OpCode {
+        self.opcode.clone()
+    }
+
+    pub fn op0(&self) -> u8 {
+        self.op0
+    }
+
+    pub fn op1(&self) -> u8 {
+        self.op1
+    }
 }
