@@ -1,4 +1,6 @@
 use clap::Parser;
+use do_core::instruction::OpCode;
+use do_core::Error;
 
 #[derive(Parser)]
 #[clap(version, author)]
@@ -13,14 +15,6 @@ struct Instruction {
     opcode: OpCode,
     op0: u8,
     op1: u8,
-}
-
-#[derive(Debug)]
-enum Error {
-    InvalidOpCode(u8),
-    Op0OutOfRange,
-    Op1OutOfRange,
-    AdditionOverflow(u32, u32),
 }
 
 // do-core1 register indexes range from 0 to 31.
@@ -47,27 +41,6 @@ impl Instruction {
         }
 
         Ok(Instruction { opcode, op0, op1 })
-    }
-}
-
-#[allow(dead_code)]
-#[derive(Debug, PartialEq)]
-enum OpCode {
-    LDW = 0x00,
-    STW = 0x01,
-    ADD = 0x02,
-    XOR = 0x03,
-}
-
-impl OpCode {
-    fn from_u8(opcode: u8) -> Result<OpCode, Error> {
-        match opcode {
-            0x00 => Ok(OpCode::LDW),
-            0x01 => Ok(OpCode::STW),
-            0x02 => Ok(OpCode::ADD),
-            0x03 => Ok(OpCode::XOR),
-            _ => Err(Error::InvalidOpCode(opcode)),
-        }
     }
 }
 
