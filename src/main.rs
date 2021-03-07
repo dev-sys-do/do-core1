@@ -52,13 +52,13 @@ fn main() -> Result<(), Error> {
         "do-core-1: instruction decoded into {:?}",
         decoded_instruction
     );
-    let op0 = decoded_instruction.op0 as usize;
-    let op1 = decoded_instruction.op1 as usize;
+    let op0 = decoded_instruction.op0() as usize;
+    let op1 = decoded_instruction.op1() as usize;
 
-    match decoded_instruction.opcode {
+    match decoded_instruction.opcode() {
         OpCode::ADD => registers[op0] = add(registers[op0], registers[op1])?,
         OpCode::XOR => registers[op0] = xor(registers[op0], registers[op1]),
-        _ => panic!("Unknown opcode {:?}", decoded_instruction.opcode),
+        _ => panic!("Unknown opcode {:?}", decoded_instruction.opcode()),
     }
 
     dump_cpu_state("Final CPU state", &registers);
