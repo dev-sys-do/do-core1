@@ -13,6 +13,9 @@ pub enum Error {
 // do-core1 register indexes range from 0 to 31.
 pub const MAX_REGISTER_INDEX: u8 = 31;
 
+// Hard-code do-core memory to 1 MB
+pub const MEMORY_SIZE: usize = 0x100000;
+
 pub mod core;
 pub mod instruction;
 pub mod memory;

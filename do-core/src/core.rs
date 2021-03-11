@@ -1,14 +1,17 @@
 use crate::instruction::{Instruction, OpCode};
-use crate::{Error, MAX_REGISTER_INDEX};
+use crate::memory::Memory;
+use crate::{Error, MAX_REGISTER_INDEX, MEMORY_SIZE};
 
 pub struct Core {
     registers: [u32; MAX_REGISTER_INDEX as usize + 1],
+    memory: Memory,
 }
 
 impl Core {
     pub fn new() -> Self {
         let mut core = Core {
             registers: [0u32; MAX_REGISTER_INDEX as usize + 1],
+            memory: Memory::new(MEMORY_SIZE),
         };
 
         // Arbitrary initial registers value.
@@ -45,7 +48,8 @@ impl Core {
         match opcode {
             OpCode::ADD => self.add(insn)?,
             OpCode::XOR => self.xor(insn)?,
-            OpCode::LDW | OpCode::STW => return Err(Error::UnsupportedOpCode(opcode)),
+            OpCode::LDW => self.load(insn)?,
+            OpCode::STW => self.store(insn)?,
         }
 
         Ok(())
@@ -73,6 +77,23 @@ impl Core {
         self.registers[op0] = self.registers[op0] ^ self.registers[op1];
 
         Ok(())
+    }
+
+    fn load(&mut self, insn: Instruction) -> Result<(), Error> {
+        let op0 = insn.op0() as usize;
+        let op1 = insn.op1() as usize;
+
+        self.registers[op0] = self.memory.load(self.registers[op1])?.into();
+
+        Ok(())
+    }
+
+    fn store(&mut self, insn: Instruction) -> Result<(), Error> {
+        let op0 = insn.op0() as usize;
+        let op1 = insn.op1() as usize;
+
+        self.memory
+            .store(self.registers[op1], self.registers[op0] as u8)
     }
 }
 
