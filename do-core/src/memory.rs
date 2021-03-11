@@ -31,3 +31,28 @@ impl Memory {
         Ok(())
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use crate::memory::Memory;
+    use crate::Error;
+
+    #[test]
+    fn test_memory_store_load() -> Result<(), Error> {
+        let mut memory = Memory::new(4096);
+
+        memory.store(0x100, 0xf)?;
+        assert_eq!(memory.load(0x100)?, 0xf);
+
+        Ok(())
+    }
+
+    #[test]
+    fn test_memory_overflow() -> Result<(), Error> {
+        let mut memory = Memory::new(4096);
+
+        assert!(memory.store(0x2000, 0xf).is_err());
+
+        Ok(())
+    }
+}
