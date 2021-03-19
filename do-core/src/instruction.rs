@@ -25,11 +25,11 @@ impl std::str::FromStr for OpCode {
     type Err = Error;
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         match s {
-            "LD"  => Ok(OpCode::LD),
-            "ST"  => Ok(OpCode::ST),
+            "LD" => Ok(OpCode::LD),
+            "ST" => Ok(OpCode::ST),
             "ADD" => Ok(OpCode::ADD),
             "XOR" => Ok(OpCode::XOR),
-            _ =>     Err(Error::ParseOpError),
+            _ => Err(Error::ParseOpError),
         }
     }
 }
@@ -76,7 +76,7 @@ impl Instruction {
 mod tests {
     use super::*;
     use crate::Error;
-    
+
     use std::str::FromStr;
 
     #[test]
@@ -161,7 +161,7 @@ mod tests {
         assert_eq!(OpCode::from_str("LD").unwrap(), OpCode::LD);
 
         assert!(OpCode::from_str("GIBBERISH").is_err());
-        
+
         Ok(())
     }
 }
