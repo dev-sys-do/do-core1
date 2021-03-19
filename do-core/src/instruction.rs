@@ -21,6 +21,19 @@ impl OpCode {
     }
 }
 
+impl std::str::FromStr for OpCode {
+    type Err = Error;
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "LD"  => Ok(OpCode::LD),
+            "ST"  => Ok(OpCode::ST),
+            "ADD" => Ok(OpCode::ADD),
+            "XOR" => Ok(OpCode::XOR),
+            _ =>     Err(Error::ParseOpError),
+        }
+    }
+}
+
 #[derive(Debug)]
 pub struct Instruction {
     opcode: OpCode,
@@ -61,8 +74,10 @@ impl Instruction {
 
 #[cfg(test)]
 mod tests {
-    use crate::instruction::{Instruction, OpCode};
+    use super::*;
     use crate::Error;
+    
+    use std::str::FromStr;
 
     #[test]
     fn test_instruction_disassemble_add_r0_r1() -> Result<(), Error> {
@@ -137,6 +152,16 @@ mod tests {
         assert_eq!(insn.op0, 5);
         assert_eq!(insn.op1, 0);
 
+        Ok(())
+    }
+
+    #[test]
+    fn test_opcode_from_string() -> Result<(), Error> {
+        assert_eq!(OpCode::from_str("ADD").unwrap(), OpCode::ADD);
+        assert_eq!(OpCode::from_str("LD").unwrap(), OpCode::LD);
+
+        assert!(OpCode::from_str("GIBBERISH").is_err());
+        
         Ok(())
     }
 }

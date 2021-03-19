@@ -8,6 +8,7 @@ pub enum Error {
     Op1OutOfRange,
     AdditionOverflow(u16, u16),
     MemoryOverflow(u16),
+    ParseOpError,
 }
 
 // do-core register indexes range from 0 to 7.
