@@ -74,7 +74,7 @@ impl Core {
         let op0 = insn.op0() as usize;
         let op1 = insn.op1() as usize;
 
-        self.registers[op0] = self.registers[op0] ^ self.registers[op1];
+        self.registers[op0] ^= self.registers[op1];
 
         Ok(())
     }
