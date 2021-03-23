@@ -20,4 +20,4 @@ jobs:
       - name: lint
         uses: actions-rs/cargo@v1
         with:
-          token: ${{ secretes.GITHUB_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
