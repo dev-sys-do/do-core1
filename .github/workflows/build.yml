@@ -1,23 +1,35 @@
-on: [push]
+on: [push, pull_request]
 name: build
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions-rs/toolchain@v1
+      - name: Checkout source code
+        uses: actions/checkout@v2
+
+      - name: Install stable toolchain
+        uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
-      - name: build
+
+      - name: Build the application
         uses: actions-rs/cargo@v1
         with:
           command: build
-      - name: test
+
+      - name: Run tests
         uses: actions-rs/cargo@v1
         with:
           command: test
           args: --workspace
-      - name: lint
+
+      - name: Lint the code
         uses: actions-rs/cargo@v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Check if code formatted
+        uses: actions-rs/cargo@v1
+        with:
+          command: fmt
+          args: --all -- --check --verbose
