@@ -24,7 +24,7 @@ jobs:
           args: --workspace
 
       - name: Lint the code
-        uses: actions-rs/cargo@v1
+        uses: actions-rs/clippy-check@v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
