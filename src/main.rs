@@ -29,10 +29,7 @@ impl Instruction {
     // Instruction constructor, a.k.a. disassembler.
     fn disassemble(insn: u32) -> Result<Instruction, Error> {
         // Keep the first 6 bits only
-        let opcode = match OpCode::from_u8((insn & 0x3f) as u8) {
-            Ok(opcode) => opcode,
-            Err(e) => return Err(e),
-        };
+        let opcode = OpCode::from_u8((insn & 0x3f) as u8)?;
 
         // Shift right by 6, keep only the first 5 bits.
         let op0 = ((insn >> 6) & 0x1f) as u8;
@@ -91,10 +88,7 @@ fn main() -> Result<(), Error> {
         insn, r1, r3
     );
 
-    let decoded_instruction = match Instruction::disassemble(insn) {
-        Ok(insn) => insn,
-        Err(e) => return Err(e),
-    };
+    let decoded_instruction = Instruction::disassemble(insn)?;
     println!(
         "do-core-1: instruction decoded into {:?}",
         decoded_instruction
