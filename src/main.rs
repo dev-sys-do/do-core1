@@ -23,8 +23,8 @@ enum Error {
     AdditionOverflow(u32, u32),
 }
 
-// do-core1 register indexes range from 0 to 7.
-const MAX_REGISTER_INDEX: u8 = 7;
+// do-core1 register indexes range from 0 to 31.
+const MAX_REGISTER_INDEX: u8 = 31;
 
 impl Instruction {
     // Instruction constructor, a.k.a. disassembler.
