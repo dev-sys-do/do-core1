@@ -1,3 +1,13 @@
+use clap::Parser;
+
+#[derive(Parser)]
+#[clap(version, author)]
+struct DoCoreOpts {
+    /// DO Core instruction
+    #[clap(short, long)]
+    insn: String,
+}
+
 #[derive(Debug)]
 struct Instruction {
     opcode: OpCode,
@@ -50,19 +60,10 @@ fn xor(op0: u32, op1: u32) -> u32 {
 }
 
 fn main() {
-    // ADD R1, R3 -> Opcode is 2 (ADD), op0 is 1 (R1) and op1 is 3 (R3)
-    // The first 6 bits of the instruction are the opcode (2): 0b000010
-    // Bits 6 to 10 are for op0 (1): 0b000001
-    // Bits 11 to 15 are for op1 (3): 0b000011
-    // The instruction for ADD R1, R3 is: 00011 | 00001 | 000010, i.e. 0b0001100001000010
-    //
-    // When splitting this binary representation in groups of 4 bits, this looks like:
-    // 0001 1000 0100 0010
-    //  1     8   4    2
-    // 0b0001100001000010 = 0x1842
-    let insn: u32 = 0x1842;
+    let opts: DoCoreOpts = DoCoreOpts::parse();
+    let insn = u32::from_str_radix(opts.insn.trim_start_matches("0x"), 16).unwrap();
     let mut r1: u32 = 20;
-    let r3: u32 = 12;
+    let r3 = 12;
 
     println!(
         "do-core-1: instruction {:#x?} Initial CPU state [R1:{:#x?} R3:{:#x?}]",
