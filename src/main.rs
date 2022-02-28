@@ -1,3 +1,4 @@
+/// An instruction must have an opcode to defined which operation to run on op0 and op1
 #[derive(Debug)]
 struct Instruction {
     opcode: OpCode,
@@ -21,6 +22,7 @@ impl Instruction {
     }
 }
 
+/// Represent an operation code
 #[allow(dead_code)]
 #[derive(Debug, PartialEq)]
 enum OpCode {
@@ -33,6 +35,7 @@ enum OpCode {
 }
 
 impl OpCode {
+    /// Provides a `from_u8` function to convert an opcode from u8 to OpCode
     fn from_u8(opcode: u8) -> OpCode {
         match opcode {
             0x00 => OpCode::LDW,
@@ -45,14 +48,18 @@ impl OpCode {
         }
     }
 }
+
+/// Add `op0` with `op1`
 fn add(op0: u32, op1: u32) -> u32 {
     op0 + op1
 }
 
+/// Perform a xor operation on `op0` and `op1`
 fn xor(op0: u32, op1: u32) -> u32 {
     op0 ^ op1
 }
 
+/// Perform a left shifting from `op0` of `op1` bits
 fn shift_left(op0: u32, op1: u32) -> u32 {
     if op1 < 32 {
         op0 << op1
@@ -61,6 +68,7 @@ fn shift_left(op0: u32, op1: u32) -> u32 {
     }
 }
 
+/// Perform a right shifting from `op0` of `op1` bits
 fn shift_right(op0: u32, op1: u32) -> u32 {
     if op1 < 32 {
         op0 >> op1
@@ -69,6 +77,7 @@ fn shift_right(op0: u32, op1: u32) -> u32 {
     }
 }
 
+/// Main entrypoint
 fn main() {
     // ADD R1, R3 -> Opcode is 2 (ADD), op0 is 1 (R1) and op1 is 3 (R3)
     // The first 6 bits of the instruction are the opcode (2): 0b000010
