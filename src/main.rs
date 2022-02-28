@@ -1,3 +1,13 @@
+use clap::Parser;
+use std::u32;
+
+#[derive(Parser, Debug)]
+#[clap(author, version, about, long_about = None)]
+struct Args {
+    #[clap(short, long)]
+    insn: String,
+}
+#[allow(dead_code)]
 #[derive(Debug)]
 struct Instruction {
     opcode: OpCode,
@@ -81,7 +91,8 @@ fn main() {
     // 0001 1000 0100 0010
     //  1     8   4    2
     // 0b0001100001000010 = 0x1842
-    let insn: u32 = 0x1842;
+    let args = Args::parse();
+    let insn: u32 = args.insn.parse::<u32>().unwrap();
     let mut r1: u32 = 20;
     let r3: u32 = 12;
 
