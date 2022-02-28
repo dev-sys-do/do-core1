@@ -168,4 +168,21 @@ mod tests {
         assert_eq!(insn.op0, 1);
         assert_eq!(insn.op1, 3);
     }
+
+
+    #[test]
+    fn test_shift_right_operation() {
+        let op0: u32 = 0xFF;
+        let op1: u32 = 1;
+        let result = super::shr(op0, op1);
+        assert_eq!(result, 0x7F);
+    }
+
+    #[test]
+    fn test_shift_left_operation() {
+        let op0: u32 = 0x01;
+        let op1: u32 = 1;
+        let result = super::shl(op0, op1);
+        assert_eq!(result, 0x02);
+    }
 }
