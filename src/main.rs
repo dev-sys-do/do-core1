@@ -1,3 +1,12 @@
+use clap::Parser;
+
+#[derive(Parser, Debug)]
+#[clap(author, version, about, long_about = None)]
+struct DoCoreOptions {
+    #[clap(short, long)]
+    instruction: String
+}
+
 #[derive(Debug)]
 struct Instruction {
     opcode: OpCode,
@@ -109,6 +118,11 @@ fn main() {
         "do-core-1: instruction decoded into {:?}",
         decoded_instruction
     );
+
+    let args = DoCoreOptions::parse();
+    let instruction = u32::from_str_radix(args.instruction.trim_start_matches("0x"), 16).unwrap();
+
+    println!("{}", instruction);
 
     r1 = match decoded_instruction.opcode {
         OpCode::ADD => add(r1, r3),
