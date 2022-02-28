@@ -100,4 +100,33 @@ mod tests {
         assert_eq!(insn.op0, 1);
         assert_eq!(insn.op1, 3);
     }
+    
+    #[test]
+    fn test_instruction_disassemble_xor_r1_r3() {
+        let insn_bytes: u32 = 0x1843;
+        let insn = Instruction::disassemble(insn_bytes);
+
+        assert_eq!(insn.opcode, OpCode::XOR);
+        assert_eq!(insn.op0, 1);
+        assert_eq!(insn.op1, 3);
+    }
+    #[test]
+    fn test_instruction_disassemble_ldw_r1_r3() {
+        let insn_bytes: u32 = 0x1840;
+        let insn = Instruction::disassemble(insn_bytes);
+
+        assert_eq!(insn.opcode, OpCode::LDW);
+        assert_eq!(insn.op0, 1);
+        assert_eq!(insn.op1, 3);
+    }
+
+    #[test]
+    fn test_instruction_disassemble_stw_r1_r3() {
+        let insn_bytes: u32 = 0x1841;
+        let insn = Instruction::disassemble(insn_bytes);
+
+        assert_eq!(insn.opcode, OpCode::STW);
+        assert_eq!(insn.op0, 1);
+        assert_eq!(insn.op1, 3);
+    }
 }
