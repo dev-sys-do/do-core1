@@ -55,3 +55,5 @@ architecture and supports the following instructions:
 | `0x01` | `STW Rn, Rm` | **ST**ore **W**ord: Store the 32-bit value from `Rn` into the memory address contained in `Rm` |
 | `0x02` | `ADD Rn, Rm` | **ADD**: Add the value contained in `Rm` into `Rn` (`Rn = Rn + Rm`)                            |
 | `0x03` | `XOR Rn, Rm` | e**X**clusive **OR**: Perform a bitwise exclusive OR between `Rn` and `Rm` (`Rn = Rn ^ Rm`)    |
+| `0x04` | `SHL Rn, Rm` | **SH**ift **L**eft: Perform a left shifting of `Rn` by `Rm` (`Rn = Rn << Rm`)                  |
+| `0x05` | `SHR Rn, Rm` | **SH**ift **R**ight: Perform a right shifting of `Rn` by `Rm` (`Rn = Rn >> Rm`)                |
