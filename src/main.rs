@@ -191,4 +191,20 @@ mod tests {
         let result = super::shl(op0, op1);
         assert_eq!(result, 0x02);
     }
+
+    #[test]
+    fn test_add_operation() {
+        let op0: u32 = 0x01;
+        let op1: u32 = 0x02;
+        let result = super::add(op0, op1);
+        assert_eq!(result, 0x03);
+    }
+
+    #[test]
+    fn test_xor_operation() {
+        let op0: u32 = 0x01;
+        let op1: u32 = 0x02;
+        let result = super::xor(op0, op1);
+        assert_eq!(result, 0x03);
+    }
 }
