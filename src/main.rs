@@ -1,5 +1,7 @@
 //! This crate permits to simulate a couple of processor instructions.
 
+use clap::Parser;
+
 #[allow(dead_code)]
 #[derive(Debug)]
 struct Instruction {
@@ -69,7 +71,18 @@ fn shl(op0: u32, op1: u32) -> u32 {
     op0 << op1
 }
 
+#[derive(Parser, Debug)]
+#[clap(author, version, about, long_about = None)]
+struct Args {
+    /// Name of the person to greet
+    #[clap(short, long)]
+    instruction: u32,
+}
+
+/// Simple program to run a processor instruction
 fn main() {
+    let args = Args::parse();
+
     // ADD R1, R3 -> Opcode is 2 (ADD), op0 is 1 (R1) and op1 is 3 (R3)
     // The first 6 bits of the instruction are the opcode (2): 0b000010
     // Bits 6 to 10 are for op0 (1): 0b000001
@@ -80,8 +93,9 @@ fn main() {
     // 0001 1000 0100 0010
     //  1     8   4    2
     // 0b0001100001000010 = 0x1842
-    let insn: u32 = 0x1845;
-    let mut r1: u32 = 2;
+    // let insn: u32 = 0x1845;
+    let insn: u32 = args.instruction;
+    let mut r1: u32 = 5;
     let r3: u32 = 2;
 
     println!(
@@ -132,7 +146,7 @@ mod tests {
         assert_eq!(insn.op0, 1);
         assert_eq!(insn.op1, 3);
     }
-
+    
     #[test]
     fn test_instruction_disassemble_add_r1_r3() {
         let insn_bytes: u32 = 0x1842;
