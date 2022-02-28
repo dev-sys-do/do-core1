@@ -1,3 +1,13 @@
+use clap::Parser;
+
+#[derive(Parser, Debug)]
+#[clap(author, version, about, long_about = None)]
+struct Args {
+    /// Instruction to parse
+    #[clap(short, long)]
+    instruction: String,
+}
+
 #[derive(Debug)]
 struct Instruction {
     opcode: OpCode,
@@ -60,7 +70,11 @@ fn main() {
     // 0001 1000 0100 0010
     //  1     8   4    2
     // 0b0001100001000010 = 0x1842
-    let insn: u32 = 0x1842;
+    let args = Args::parse();
+    let raw_insn = args.instruction.trim_start_matches("0x");
+    let insn: u32 = u32::from_str_radix(&raw_insn, 16)
+        .ok()
+        .expect("Unable to parse this instruction");
     let mut r1: u32 = 20;
     let r3: u32 = 12;
 
