@@ -1,5 +1,6 @@
 use clap::Parser;
 
+#[allow(dead_code)]
 #[derive(Debug)]
 struct Instruction {
     opcode: OpCode,
