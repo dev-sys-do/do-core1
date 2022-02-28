@@ -193,6 +193,14 @@ mod tests {
     }
 
     #[test]
+    #[should_panic]
+    fn test_shift_left_overflow_operation() {
+        let op0: u32 = 0xFF;
+        let op1: u32 = 0xFF;
+        super::shl(op0, op1);
+    }
+
+    #[test]
     fn test_add_operation() {
         let op0: u32 = 0x01;
         let op1: u32 = 0x02;
