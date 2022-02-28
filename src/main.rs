@@ -60,7 +60,7 @@ fn shr(op0: u32, op1: u32) -> u32 {
 }
 
 /**
- * Shift right operation. op1 is the number of bits to shift on op0.
+ * Shift left operation. op1 is the number of bits to shift on op0.
  */
 fn shl(op0: u32, op1: u32) -> u32 {
     op0 << op1
@@ -146,6 +146,25 @@ mod tests {
         let insn = Instruction::disassemble(insn_bytes);
 
         assert_eq!(insn.opcode, OpCode::STW);
+        assert_eq!(insn.op0, 1);
+        assert_eq!(insn.op1, 3);
+    }    #[test]
+    
+    fn test_instruction_disassemble_shr_r1_r3() {
+        let insn_bytes: u32 = 0x1844;
+        let insn = Instruction::disassemble(insn_bytes);
+
+        assert_eq!(insn.opcode, OpCode::SHR);
+        assert_eq!(insn.op0, 1);
+        assert_eq!(insn.op1, 3);
+    }
+
+    #[test]
+    fn test_instruction_disassemble_shl_r1_r3() {
+        let insn_bytes: u32 = 0x1845;
+        let insn = Instruction::disassemble(insn_bytes);
+
+        assert_eq!(insn.opcode, OpCode::SHL);
         assert_eq!(insn.op0, 1);
         assert_eq!(insn.op1, 3);
     }
