@@ -53,10 +53,32 @@ fn xor(op0: u32, op1: u32) -> u32 {
     op0 ^ op1
 }
 
+/// Logical shift to the left of op0, by op1 times.
+/// 
+/// op0 << op1
+///
+/// # Arguments
+///
+/// * `op0` - The number on which the operation will be done
+/// * `op1` - How many shifts we do
+/// 
+/// Returns the result
+/// 
 fn shl(op0: u32, op1: u32) -> u32 {
     op0 << op1
 }
 
+/// Logical shift to the right of op0, by op1 times.
+/// 
+/// op0 >> op1
+///
+/// # Arguments
+///
+/// * `op0` - The number on which the operation will be done
+/// * `op1` - How many shifts we do
+/// 
+/// Returns the result
+/// 
 fn shr(op0: u32, op1: u32) -> u32 {
     op0 >> op1
 }
