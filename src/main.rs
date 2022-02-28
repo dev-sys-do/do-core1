@@ -1,6 +1,5 @@
 use clap::Parser;
 
-
 #[derive(Debug)]
 struct Instruction {
     opcode: OpCode,
@@ -83,21 +82,11 @@ struct Args {
     /// Name of the person to greet
     #[clap(short, long)]
     instruction: String,
-
 }
 
-
-
 fn main() {
-    
-    // parse
+    // parse arguments
     let args = Args::parse();
-
-
-
-
-
-
 
     // ADD R1, R3 -> Opcode is 2 (ADD), op0 is 1 (R1) and op1 is 3 (R3)
     // The first 6 bits of the instruction are the opcode (2): 0b000010
@@ -110,10 +99,12 @@ fn main() {
     //  1     8   4    2
     // 0b0001100001000010 = 0x1842
 
+    // parse instruction
 
     let without_prefix = args.instruction.trim_start_matches("0x");
+    let insn: u32 = u32::from_str_radix(without_prefix, 16).unwrap_or(0);
 
-    let insn: u32 = u32::from_str_radix(without_prefix, 16).unwrap();
+    // init registers
     let mut r1: u32 = 20;
     let r3: u32 = 12;
 
@@ -127,6 +118,8 @@ fn main() {
         "do-core-1: instruction decoded into {:?}",
         decoded_instruction
     );
+
+    // we currently don’t manage registers, so we only use r1 and r3
 
     match decoded_instruction.opcode {
         OpCode::ADD => r1 = add(r1, r3),
