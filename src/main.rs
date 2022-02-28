@@ -1,3 +1,5 @@
+//! This crate permits to simulate a couple of processor instructions.
+
 #[allow(dead_code)]
 #[derive(Debug)]
 struct Instruction {
@@ -46,18 +48,23 @@ impl OpCode {
         }
     }
 }
+
+/// Returns the sum of the two arguments
 fn add(op0: u32, op1: u32) -> u32 {
     op0 + op1
 }
 
+/// Returns the xor result of the two arguments
 fn xor(op0: u32, op1: u32) -> u32 {
     op0 ^ op1
 }
 
+/// Returns the right shifting op1 bits to op0
 fn shr(op0: u32, op1: u32) -> u32 {
     op0 >> op1
 }
 
+/// Returns the left shifting op1 bits to op0
 fn shl(op0: u32, op1: u32) -> u32 {
     op0 << op1
 }
