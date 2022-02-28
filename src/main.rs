@@ -111,7 +111,7 @@ fn main() {
 
 #[cfg(test)]
 mod tests {
-    use crate::{Instruction, OpCode};
+    use crate::{Instruction, OpCode, add, xor, shift_left, shift_right};
 
     #[test]
     fn test_instruction_disassemble_ldw_r1_r3() {
@@ -171,5 +171,57 @@ mod tests {
         assert_eq!(insn.opcode, OpCode::SHR);
         assert_eq!(insn.op0, 1);
         assert_eq!(insn.op1, 3);
+    }
+
+    #[test]
+    fn test_add_op0_op1() {
+        let op0: u32 = 1;
+        let op1: u32 = 2;
+        let result: u32 = add(op0, op1);
+
+        assert_eq!(result, 3);
+    }
+
+    #[test]
+    fn test_xor_op0_op1() {
+        let op0: u32 = 1;
+        let op1: u32 = 2;
+        let result: u32 = xor(op0, op1);
+
+        assert_eq!(result, 3);
+    }
+
+    #[test]
+    fn test_shift_left_ok_op0_op1() {
+        let op0: u32 = 1;
+        let op1: u32 = 2;
+        let result: u32 = shift_left(op0, op1);
+
+        assert_eq!(result, 4);
+    }
+
+    #[test]
+    fn test_shift_right_ok_op0_op1() {
+        let op0: u32 = 2;
+        let op1: u32 = 1;
+        let result: u32 = shift_right(op0, op1);
+
+        assert_eq!(result, 1);
+    }
+
+    #[test]
+    #[should_panic]
+    fn test_shift_left_panic_op0_op1() {
+        let op0: u32 = 1;
+        let op1: u32 = 0xff;
+        shift_left(op0, op1);
+    }
+
+    #[test]
+    #[should_panic]
+    fn test_shift_right_panic_op0_op1() {
+        let op0: u32 = 1;
+        let op1: u32 = 0xff;
+        shift_right(op0, op1);
     }
 }
