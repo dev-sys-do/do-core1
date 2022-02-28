@@ -103,7 +103,7 @@ fn main() {
 
 #[cfg(test)]
 mod tests {
-    use crate::{Instruction, OpCode};
+    use crate::{shl, shr, Instruction, OpCode};
 
     #[test]
     fn test_instruction_disassemble_ldw_r1_r3() {
@@ -153,6 +153,22 @@ mod tests {
         assert_eq!(insn.opcode, OpCode::SHL);
         assert_eq!(insn.op0, 1);
         assert_eq!(insn.op1, 3);
+    }
+
+    #[test]
+    fn test_shl_r1_r3() {
+        let op0: u32 = 0x3;
+        let op1: u32 = 0x2;
+
+        assert_eq!(shl(op0, op1), 0x0)
+    }
+
+    #[test]
+    fn test_shr_r1_r3() {
+        let op0: u32 = 0x3;
+        let op1: u32 = 0x2;
+
+        assert_eq!(shr(op0, op1), 0xc)
     }
 
     #[test]
