@@ -201,6 +201,14 @@ mod tests {
     }
 
     #[test]
+    #[should_panic]
+    fn test_shift_right_underflow_operation() {
+        let op0: u32 = 0x01;
+        let op1: u32 = 0xFF;
+        super::shr(op0, op1);
+    }
+
+    #[test]
     fn test_add_operation() {
         let op0: u32 = 0x01;
         let op1: u32 = 0x02;
