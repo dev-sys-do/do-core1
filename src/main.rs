@@ -82,10 +82,13 @@ fn shl(op0: u32, op1: u32) -> u32 {
     op0 << op1
 }
 
+
+
+/// Arguments to pass to the program.
 #[derive(Parser, Debug)]
 #[clap(author, version, about, long_about = None)]
 struct Args {
-    /// Name of the person to greet
+    /// The instruction to disassemble and execute.
     #[clap(short, long)]
     instruction: String,
 }
