@@ -92,7 +92,7 @@ fn main() {
     //  1     8   4    2
     // 0b0001100001000010 = 0x1842
     let args = Args::parse();
-    let insn: u32 = args.insn.parse::<u32>().unwrap();
+    let insn: u32 = u32::from_str_radix(&args.insn.trim_start_matches("0x"), 16).unwrap();
     let mut r1: u32 = 20;
     let r3: u32 = 12;
 
