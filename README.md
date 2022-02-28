@@ -49,9 +49,11 @@ The `do-core1` is a [load-store](https://en.wikipedia.org/wiki/Load%E2%80%93stor
 architecture and supports the following instructions:
 
 
-| Opcode | Instruction  | Description                                                                                    |
-|--------|--------------|------------------------------------------------------------------------------------------------|
-| `0x00` | `LDW Rn, Rm` | **L**oa**D** **W**ord: Load the 32-bit value at the memory address contained in `Rm` into `Rn` |
-| `0x01` | `STW Rn, Rm` | **ST**ore **W**ord: Store the 32-bit value from `Rn` into the memory address contained in `Rm` |
-| `0x02` | `ADD Rn, Rm` | **ADD**: Add the value contained in `Rm` into `Rn` (`Rn = Rn + Rm`)                            |
-| `0x03` | `XOR Rn, Rm` | e**X**clusive **OR**: Perform a bitwise exclusive OR between `Rn` and `Rm` (`Rn = Rn ^ Rm`)    |
+| Opcode | Instruction     | Description                                                                                    |
+|--------|-----------------|------------------------------------------------------------------------------------------------|
+| `0x00` | `LDW Rn, Rm`    | **L**oa**D** **W**ord: Load the 32-bit value at the memory address contained in `Rm` into `Rn` |
+| `0x01` | `STW Rn, Rm`    | **ST**ore **W**ord: Store the 32-bit value from `Rn` into the memory address contained in `Rm` |
+| `0x02` | `ADD Rn, Rm`    | **ADD**: Add the value contained in `Rm` into `Rn` (`Rn = Rn + Rm`)                            |
+| `0x03` | `XOR Rn, Rm`    | e**X**clusive **OR**: Perform a bitwise exclusive OR between `Rn` and `Rm` (`Rn = Rn ^ Rm`)    |
+| `0x04` | `SHR Rn, Count` | **SH**ift **R**ight: Perform a right shift in `Rn` on `Count` bits (`Rn = Rn >> Count`)        |
+| `0x05` | `SHL Rn, Count` | **SH**ift **L**eft: Perform a left shift in `Rn` on `Count` bits (`Rn = Rn << Count`)          |
