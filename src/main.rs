@@ -172,6 +172,22 @@ mod tests {
     }
 
     #[test]
+    #[should_panic]
+    fn test_shl_panic_r1_r3() {
+        let op0: u32 = 0x3;
+        let op1: u32 = 0xfff;
+        shl(op0, op1);
+    }
+
+    #[test]
+    #[should_panic]
+    fn test_shr_panic_r1_r3() {
+        let op0: u32 = 0x3;
+        let op1: u32 = 0xfff;
+        shr(op0, op1);
+    }
+
+    #[test]
     fn test_instruction_disassemble_shr_r1_r3() {
         let insn_bytes: u32 = 0x1845;
         let insn = Instruction::disassemble(insn_bytes);
