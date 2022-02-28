@@ -103,7 +103,7 @@ fn main() {
 
 #[cfg(test)]
 mod tests {
-    use crate::{Instruction, OpCode};
+    use crate::{Instruction, OpCode, shl, shr};
 
     #[test]
     fn test_instruction_disassemble_add_r1_r3() {
@@ -173,5 +173,39 @@ mod tests {
         assert_eq!(insn.opcode, OpCode::SHL);
         assert_eq!(insn.op0, 6);
         assert_eq!(insn.op1, 2);
+    }
+
+    #[test]
+    fn test_function_shl() {
+        let op0: u32 = 0x05;
+        let op1: u8 = 0x01;
+        let result = shl(op0, op1);
+
+        assert_eq!(result, 0x0A);
+    }
+
+    #[test]
+    fn test_function_shr() {
+        let op0: u32 = 0x10;
+        let op1: u8 = 0x03;
+        let result = shr(op0, op1);
+
+        assert_eq!(result, 0x02);
+    }
+
+    #[test]
+    #[should_panic]
+    fn test_function_shl_should_panic_overflow() {
+        let op0: u32 = 0x05;
+        let op1: u8 = 0x30;
+        shl(op0, op1);
+    }
+
+    #[test]
+    #[should_panic]
+    fn test_function_shr_should_panic_overflow() {
+        let op0: u32 = 0x10;
+        let op1: u8 = 0x28;
+        shr(op0, op1);
     }
 }
