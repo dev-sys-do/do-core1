@@ -1,8 +1,17 @@
+use clap::Parser;
+
 #[derive(Debug)]
 struct Instruction {
     opcode: OpCode,
     op0: u8,
     op1: u8,
+}
+
+#[derive(Parser, Debug)]
+#[clap(author, version, about)]
+struct Args {
+    #[clap(short, long)]
+    insn: String,
 }
 
 impl Instruction {
@@ -60,10 +69,11 @@ fn main() {
     // 0001 1000 0100 0010
     //  1     8   4    2
     // 0b0001100001000010 = 0x1842
-    let insn: u32 = 0x1842;
+    // let insn: u32 = 0x1842;
     let mut r1: u32 = 20;
     let r3: u32 = 12;
-
+    let opts = Args::parse();
+    let insn : u32 = u32::from_str_radix(opts.insn.trim_start_matches("0x"), 16).unwrap();
     println!(
         "do-core-1: instruction {:#x?} Initial CPU state [R1:{:#x?} R3:{:#x?}]",
         insn, r1, r3
