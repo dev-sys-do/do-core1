@@ -1,24 +1,30 @@
 use clap::Parser;
 
+/// Represent an instruction
+/// with an opcode and two operands
 #[allow(dead_code)]
 #[derive(Debug)]
 struct Instruction {
+    /// the operation code
     opcode: OpCode,
+    /// the first operand
     op0: u8,
+    /// the second operand
     op1: u8,
 }
 
-// Simple cli to execute an instruction from the do-core1
+/// Simple cli to execute an instruction from the do-core1
 #[derive(Parser, Debug)]
 #[clap(author, version, about, long_about = None)]
 struct DoCoreArgs {
-    /// Instruction to execute
+    /// Instruction to execute (eg. 0x1842)
     #[clap(short, long)]
     insn: String,
 }
 
 impl Instruction {
-    // Instruction constructor, a.k.a. disassembler.
+    /// Instruction constructor, a.k.a. disassembler.
+    /// Take an instruction code as u32 and return an Instruction instance
     fn disassemble(insn: u32) -> Instruction {
         // Keep the first 6 bits only
         let opcode = OpCode::from_u8((insn & 0x3f) as u8);
@@ -33,6 +39,7 @@ impl Instruction {
     }
 }
 
+/// Represent an operation code from the do-core
 #[allow(dead_code)]
 #[derive(Debug, PartialEq)]
 enum OpCode {
@@ -45,6 +52,7 @@ enum OpCode {
 }
 
 impl OpCode {
+    /// Convert an u8 to an OpCode, panic if it's not a valid OpCode
     fn from_u8(opcode: u8) -> OpCode {
         match opcode {
             0x00 => OpCode::LDW,
@@ -57,33 +65,29 @@ impl OpCode {
         }
     }
 }
+
+/// Returns the result of the addition of the two parameters
 fn add(op0: u32, op1: u32) -> u32 {
     op0 + op1
 }
 
+/// Return the XOR operation of the two parameters
 fn xor(op0: u32, op1: u32) -> u32 {
     op0 ^ op1
 }
 
+/// Return the right shift operation of the two parameters
 fn shr(op0: u32, op1: u8) -> u32 {
     op0 >> op1
 }
 
+/// Return the left shift operation of the two parameters
 fn shl(op0: u32, op1: u8) -> u32 {
     op0 << op1
 }
 
+/// Launch the cli, parse the arguments and execute the instruction
 fn main() {
-    // ADD R1, R3 -> Opcode is 2 (ADD), op0 is 1 (R1) and op1 is 3 (R3)
-    // The first 6 bits of the instruction are the opcode (2): 0b000010
-    // Bits 6 to 10 are for op0 (1): 0b000001
-    // Bits 11 to 15 are for op1 (3): 0b000011
-    // The instruction for ADD R1, R3 is: 00011 | 00001 | 000010, i.e. 0b0001100001000010
-    //
-    // When splitting this binary representation in groups of 4 bits, this looks like:
-    // 0001 1000 0100 0010
-    //  1     8   4    2
-    // 0b0001100001000010 = 0x1842
     let args: DoCoreArgs = DoCoreArgs::parse();
     let insn: u32 = u32::from_str_radix(args.insn.trim_start_matches("0x"), 16).unwrap();
     let mut r1: u32 = 20;
