@@ -8,7 +8,7 @@ struct Instruction {
 impl Instruction {
     // Instruction constructor, a.k.a. disassembler.
     fn disassemble(insn: u32) -> Instruction {
-        // Keep the first 6 bits only
+        // Keep the first 6 bits only 11 1111
         let opcode = OpCode::from_u8((insn & 0x3f) as u8);
 
         // Shift right by 6, keep only the first 5 bits.
@@ -28,6 +28,8 @@ enum OpCode {
     STW = 0x01,
     ADD = 0x02,
     XOR = 0x03,
+    SHL = 0x04,
+    SHR = 0x05,
 }
 
 impl OpCode {
@@ -37,6 +39,8 @@ impl OpCode {
             0x01 => OpCode::STW,
             0x02 => OpCode::ADD,
             0x03 => OpCode::XOR,
+            0x04 => OpCode::SHL,
+            0x05 => OpCode::SHR,
             _ => panic!("Unknown opcode {:?}", opcode),
         }
     }
@@ -47,6 +51,14 @@ fn add(op0: u32, op1: u32) -> u32 {
 
 fn xor(op0: u32, op1: u32) -> u32 {
     op0 ^ op1
+}
+
+fn shl(op0: u32, op1: u32) -> u32 {
+    op0 >> op1
+}
+
+fn shr(op0: u32, op1: u32) -> u32 {
+    op0 << op1
 }
 
 fn main() {
@@ -78,6 +90,8 @@ fn main() {
     match decoded_instruction.opcode {
         OpCode::ADD => r1 = add(r1, r3),
         OpCode::XOR => r1 = xor(r1, r3),
+        OpCode::SHL => r1 = shl(r1, r3),
+        OpCode::SHR => r1 = shr(r1, r3),
         _ => panic!("Unknown opcode {:?}", decoded_instruction.opcode),
     }
 
