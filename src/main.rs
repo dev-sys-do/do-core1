@@ -1,3 +1,13 @@
+use clap::Parser;
+
+#[derive(Parser, Debug)]
+#[clap(author, version, about, long_about = None)]
+struct Args {
+    /// Instruction, exemple : 0x1842
+    #[clap(short, long)]
+    insn: String,
+}
+
 #[derive(Debug)]
 struct Instruction {
     opcode: OpCode,
@@ -28,6 +38,8 @@ enum OpCode {
     STW = 0x01,
     ADD = 0x02,
     XOR = 0x03,
+    SHL = 0x04,
+    SHR = 0x05,
 }
 
 impl OpCode {
@@ -37,10 +49,13 @@ impl OpCode {
             0x01 => OpCode::STW,
             0x02 => OpCode::ADD,
             0x03 => OpCode::XOR,
+            0x04 => OpCode::SHL,
+            0x05 => OpCode::SHR,
             _ => panic!("Unknown opcode {:?}", opcode),
         }
     }
 }
+
 fn add(op0: u32, op1: u32) -> u32 {
     op0 + op1
 }
@@ -48,6 +63,39 @@ fn add(op0: u32, op1: u32) -> u32 {
 fn xor(op0: u32, op1: u32) -> u32 {
     op0 ^ op1
 }
+
+/// Returns a number multiplied by 2 using bit shift
+///
+/// # Arguments
+///
+/// * `op0` - An u32 number
+/// * `n` - number of bit to shift
+/// 
+/// # Examples
+///
+/// ```rust
+/// left_shift(20, 1); // return 40
+/// ```
+fn left_shift(op0: u32, n: u32) -> u32 {
+    op0 << n
+}
+
+/// Returns a number divided by 2 using bit shift
+///
+/// # Arguments
+///
+/// * `op0` - An u32 number
+/// * `n` - number of bit to shift
+/// 
+/// # Examples
+///
+/// ```rust
+/// right_shift(20, 1); // return 10 
+/// ```
+fn right_shift(op0: u32, n: u32) -> u32 {
+    op0 >> n
+}
+
 
 fn main() {
     // ADD R1, R3 -> Opcode is 2 (ADD), op0 is 1 (R1) and op1 is 3 (R3)
@@ -60,7 +108,8 @@ fn main() {
     // 0001 1000 0100 0010
     //  1     8   4    2
     // 0b0001100001000010 = 0x1842
-    let insn: u32 = 0x1842;
+    let args = Args::parse();
+    let insn: u32 = u32::from_str_radix(args.insn.trim_start_matches("0x"), 16).unwrap();
     let mut r1: u32 = 20;
     let r3: u32 = 12;
 
@@ -78,6 +127,8 @@ fn main() {
     match decoded_instruction.opcode {
         OpCode::ADD => r1 = add(r1, r3),
         OpCode::XOR => r1 = xor(r1, r3),
+        OpCode::SHL => r1 = left_shift(r1, 1),
+        OpCode::SHR => r1 = right_shift(r3, 1),
         _ => panic!("Unknown opcode {:?}", decoded_instruction.opcode),
     }
 
@@ -89,8 +140,9 @@ fn main() {
 
 #[cfg(test)]
 mod tests {
-    use crate::{Instruction, OpCode};
+    use crate::*;
 
+    // test dissassemble function
     #[test]
     fn test_instruction_disassemble_add_r1_r3() {
         let insn_bytes: u32 = 0x1842;
@@ -140,4 +192,61 @@ mod tests {
         assert_eq!(insn.op0, 5);
         assert_eq!(insn.op1, 0);
     }
+
+    #[test]
+    fn test_instruction_disassemble_left_shift_r5_r0() {
+        let insn_bytes: u32 = 0x0144;
+        let insn = Instruction::disassemble(insn_bytes);
+
+        assert_eq!(insn.opcode, OpCode::SHL);
+        assert_eq!(insn.op0, 5);
+        assert_eq!(insn.op1, 0);
+    }
+
+    #[test]
+    fn test_instruction_disassemble_right_shift_r5_r0() {
+        let insn_bytes: u32 = 0x0145;
+        let insn = Instruction::disassemble(insn_bytes);
+
+        assert_eq!(insn.opcode, OpCode::SHR);
+        assert_eq!(insn.op0, 5);
+        assert_eq!(insn.op1, 0);
+    }
+
+    // test shift functions
+    #[test]
+    fn test_left_shift() {
+        let op0: u32 = 20;
+        let n: u32 = 1;
+        
+        let result: u32 = left_shift(op0, n);
+        assert_eq!(result, 40);
+    } 
+    
+    #[test]
+    fn test_right_shift() {
+        let op0: u32 = 20;
+        let n: u32 = 2;
+        
+        let result: u32 = right_shift(op0, n);
+        assert_eq!(result, 5);
+    }
+
+    #[test]
+    #[should_panic]
+    fn test_left_shift_limit() {
+        let op0: u32 = 1;
+        let n: u32 = 33;
+        
+        left_shift(op0, n);
+    } 
+    
+    #[test]
+    #[should_panic]
+    fn test_right_shift_limit() {
+        let op0: u32 = 1;
+        let n: u32 = 33;
+        
+        right_shift(op0, n);
+    }    
 }
