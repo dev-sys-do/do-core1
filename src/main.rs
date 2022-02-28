@@ -1,3 +1,4 @@
+use clap::Parser;
 
 /// Contains the operation code (`OpCode`) and two operands : `op0` and `op1`
 #[derive(Debug)]
@@ -7,6 +8,13 @@ struct Instruction {
     op1: u8,
 }
 
+#[derive(Parser, Debug)]
+#[clap(author, version, about, long_about = None)]
+struct Args {
+    /// instruction code to parse and execute, ex : 0x1842
+    #[clap(short, long)]
+    instruction: String,
+}
 
 
 impl Instruction {
@@ -83,7 +91,8 @@ fn main() {
     // 0001 1000 0100 0010
     //  1     8   4    2
     // 0b0001100001000010 = 0x1842
-    let insn: u32 = 0x1842;
+    let args = Args::parse();
+    let insn: u32 = u32::from_str_radix(args.instruction.trim_start_matches("0x"), 16).unwrap();
     let mut r1: u32 = 20;
     let r3: u32 = 12;
 
