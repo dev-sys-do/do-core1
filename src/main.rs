@@ -28,6 +28,8 @@ enum OpCode {
     STW = 0x01,
     ADD = 0x02,
     XOR = 0x03,
+    SHR = 0x04,
+    SHL = 0x05,
 }
 
 impl OpCode {
@@ -37,6 +39,8 @@ impl OpCode {
             0x01 => OpCode::STW,
             0x02 => OpCode::ADD,
             0x03 => OpCode::XOR,
+            0x04 => OpCode::SHR,
+            0x05 => OpCode::SHL,
             _ => panic!("Unknown opcode {:?}", opcode),
         }
     }
@@ -48,6 +52,20 @@ fn add(op0: u32, op1: u32) -> u32 {
 fn xor(op0: u32, op1: u32) -> u32 {
     op0 ^ op1
 }
+/**
+ * Shift right operation. op1 is the number of bits to shift on op0.
+ */
+fn shr(op0: u32, op1: u32) -> u32 {
+    op0 >> op1
+}
+
+/**
+ * Shift right operation. op1 is the number of bits to shift on op0.
+ */
+fn shl(op0: u32, op1: u32) -> u32 {
+    op0 << op1
+}
+
 
 fn main() {
     // ADD R1, R3 -> Opcode is 2 (ADD), op0 is 1 (R1) and op1 is 3 (R3)
@@ -78,6 +96,8 @@ fn main() {
     match decoded_instruction.opcode {
         OpCode::ADD => r1 = add(r1, r3),
         OpCode::XOR => r1 = xor(r1, r3),
+        OpCode::SHR => r1 = shr(r1, r3),
+        OpCode::SHL => r1 = shl(r1, r3),
         _ => panic!("Unknown opcode {:?}", decoded_instruction.opcode),
     }
 
@@ -100,7 +120,7 @@ mod tests {
         assert_eq!(insn.op0, 1);
         assert_eq!(insn.op1, 3);
     }
-    
+
     #[test]
     fn test_instruction_disassemble_xor_r1_r3() {
         let insn_bytes: u32 = 0x1843;
