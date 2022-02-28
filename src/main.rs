@@ -5,6 +5,7 @@ struct Instruction {
     op1: u8,
 }
 
+//Implementation of an instruction
 impl Instruction {
     // Instruction constructor, a.k.a. disassembler.
     fn disassemble(insn: u32) -> Instruction {
@@ -23,6 +24,7 @@ impl Instruction {
 
 #[allow(dead_code)]
 #[derive(Debug, PartialEq)]
+//Enumeration of all available Opcode
 enum OpCode {
     LDW = 0x00,
     STW = 0x01,
@@ -32,6 +34,7 @@ enum OpCode {
     SHR = 0x05,
 }
 
+//Implementation of all available Opcode
 impl OpCode {
     fn from_u8(opcode: u8) -> OpCode {
         match opcode {
@@ -45,22 +48,28 @@ impl OpCode {
         }
     }
 }
+
+//Add two opcode together
 fn add(op0: u32, op1: u32) -> u32 {
     op0 + op1
 }
 
+//Xor two opcode together
 fn xor(op0: u32, op1: u32) -> u32 {
     op0 ^ op1
 }
 
+//Shift left op0 by op1 bits
 fn shl(op0: u32, op1: u32) -> u32 {
     op0 >> op1
 }
 
+//Shift right op0 by op1 bits
 fn shr(op0: u32, op1: u32) -> u32 {
     op0 << op1
 }
 
+//Main function
 fn main() {
     // ADD R1, R3 -> Opcode is 2 (ADD), op0 is 1 (R1) and op1 is 3 (R3)
     // The first 6 bits of the instruction are the opcode (2): 0b000010
