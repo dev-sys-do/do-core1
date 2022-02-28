@@ -1,3 +1,6 @@
+use clap::Parser;
+
+
 #[derive(Debug)]
 struct Instruction {
     opcode: OpCode,
@@ -74,7 +77,28 @@ fn shl(op0: u32, op1: u32) -> u32 {
     op0 << op1
 }
 
+#[derive(Parser, Debug)]
+#[clap(author, version, about, long_about = None)]
+struct Args {
+    /// Name of the person to greet
+    #[clap(short, long)]
+    instruction: String,
+
+}
+
+
+
 fn main() {
+    
+    // parse
+    let args = Args::parse();
+
+
+
+
+
+
+
     // ADD R1, R3 -> Opcode is 2 (ADD), op0 is 1 (R1) and op1 is 3 (R3)
     // The first 6 bits of the instruction are the opcode (2): 0b000010
     // Bits 6 to 10 are for op0 (1): 0b000001
@@ -85,7 +109,11 @@ fn main() {
     // 0001 1000 0100 0010
     //  1     8   4    2
     // 0b0001100001000010 = 0x1842
-    let insn: u32 = 0x1842;
+
+
+    let without_prefix = args.instruction.trim_start_matches("0x");
+
+    let insn: u32 = u32::from_str_radix(without_prefix, 16).unwrap();
     let mut r1: u32 = 20;
     let r3: u32 = 12;
 
